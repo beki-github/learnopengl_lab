@@ -1,8 +1,8 @@
 # Ignore the build folders
 build/
 bin/
-executable/Debug/
-executable/Release/
+executable/
+executable/
 
 # Ignore VS Code specific local settings
 .vscode/

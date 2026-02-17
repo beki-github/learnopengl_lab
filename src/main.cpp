@@ -42,6 +42,39 @@ GLuint indices[] =
 	2, 3, 4,
 	3, 0, 4
 };
+GLfloat cubeVertices[] = {
+    // Portions           // Index
+    -0.5f, -0.5f,  0.5f,  // 0: Front-Bottom-Left
+     0.5f, -0.5f,  0.5f,  // 1: Front-Bottom-Right
+     0.5f,  0.5f,  0.5f,  // 2: Front-Top-Right
+    -0.5f,  0.5f,  0.5f,  // 3: Front-Top-Left
+    -0.5f, -0.5f, -0.5f,  // 4: Back-Bottom-Left
+     0.5f, -0.5f, -0.5f,  // 5: Back-Bottom-Right
+     0.5f,  0.5f, -0.5f,  // 6: Back-Top-Right
+    -0.5f,  0.5f, -0.5f   // 7: Back-Top-Left
+};
+
+GLuint cubeIndices[] = {
+    // Front face
+    0, 1, 2,
+    0, 2, 3,
+    // Right face
+    1, 5, 6,
+    1, 6, 2,
+    // Back face
+    5, 4, 7,
+    5, 7, 6,
+    // Left face
+    4, 0, 3,
+    4, 3, 7,
+    // Top face
+    3, 2, 6,
+    3, 6, 7,
+    // Bottom face
+    4, 5, 1,
+    4, 1, 0
+};
+
 
 //global intial states for the camera
 glm::vec3 cameraPos= glm::vec3(0.0f,0.25f,6.0f);
@@ -103,33 +136,55 @@ int main(){
 
     VAO1.Unbind();
     VBO1.Unbind();
+    EBO1.Unbind();
+
+    //creating buffer object for the light source object
+
+    VAO VAO2;
+    VAO2.Bind();
+
+    VBO VBO2(cubeVertices,sizeof(cubeVertices));
+    EBO EBO2(cubeIndices,sizeof(cubeIndices));
+
+    VAO2.linkAttrib(VBO2,0,3,GL_FLOAT,3*sizeof(float),(void *)0);
+
+    VAO2.Unbind();
+    VBO2.Unbind();
+    EBO2.Unbind();
     
     
 
     Shader shaderProgram3("shaders/shader.vert","shaders/shader.frag");
+    Shader shaderProgram2("shaders/lightsource.vert","shaders/lightsource.frag");
 
     const char* imgPath = "assets/bricks.jpg";
     Texture popCat(imgPath, GL_TEXTURE_2D, GL_TEXTURE0, GL_UNSIGNED_BYTE);
-	  popCat.texUnit(shaderProgram3, "tex0", 0);
+	popCat.texUnit(shaderProgram3, "tex0", 0);
     popCat.Bind();
 
 
     glm::mat4 model=glm::mat4(1.0f);
+    glm::mat4 objModel=glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection;
 
-    model=glm::translate(model,glm::vec3(0.0f,0.0f,0.0f));
+    
    
     projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,100.0f);
-
+    //
     shaderProgram3.use();
-    
+    shaderProgram3.setMat4(2,GL_FALSE,projection);
+    shaderProgram3.setVec3(3,glm::vec3(1.0f,0.0f,0.0f));
+
+    //
+    shaderProgram2.use();
+    shaderProgram2.setMat4(2,GL_FALSE,projection);
+    objModel=glm::translate(objModel,glm::vec3(1.0f,2.0f,0.0f));
+    shaderProgram2.setMat4(0,GL_FALSE,objModel);
+    shaderProgram2.setVec3(3,glm::vec3(1.0f,0.0f,0.0f));
     
 
-    //trying to implement a camera!!
-   
     
-    shaderProgram3.setMat4(2,GL_FALSE,projection);
 
     
     glEnable(GL_DEPTH_TEST);
@@ -142,14 +197,21 @@ int main(){
         glClearColor(0.039f, 0.059f, 0.122f,0.3f);
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         processInput(window,glfwGetTime());
-        VAO1.Bind();
-        model=glm::rotate(model,glm::radians(0.004f),glm::vec3(0.0f,1.0f,0.0f));
-        shaderProgram3.setMat4(0,GL_FALSE,model);
         view=camera.GetViewMatrix();
+        VAO1.Bind();
+        shaderProgram3.use();
+        model=glm::translate(model,glm::vec3(0.0f,0.0f,0.0f));
+        model=glm::rotate(model,glm::radians(0.03f),glm::vec3(0.0f,1.0f,0.0f));
+        shaderProgram3.setMat4(0,GL_FALSE,model);
         shaderProgram3.setMat4(1,GL_FALSE,view);
         glDrawElements(GL_TRIANGLES,sizeof(indices)/sizeof(int),GL_UNSIGNED_INT,0);
         
         //
+
+        VAO2.Bind();
+        shaderProgram2.use();
+        shaderProgram2.setMat4(1,GL_FALSE,view);
+        glDrawElements(GL_TRIANGLES,sizeof(cubeIndices)/sizeof(int),GL_UNSIGNED_INT,0);        
         glfwSwapBuffers(window);
 
         glfwPollEvents();
