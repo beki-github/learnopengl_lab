@@ -22,26 +22,58 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 float lastFrame=0.0f;
 float deltaTime;
 
-// Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
+GLfloat vertices[] = {
+    // positions          // normals           // texcoords
+
+    // back face
+    -0.5f,-0.5f,-0.5f,   0.0f, 0.0f,-1.0f,    0.0f,0.0f,
+     0.5f,-0.5f,-0.5f,   0.0f, 0.0f,-1.0f,    1.0f,0.0f,
+     0.5f, 0.5f,-0.5f,   0.0f, 0.0f,-1.0f,    1.0f,1.0f,
+    -0.5f, 0.5f,-0.5f,   0.0f, 0.0f,-1.0f,    0.0f,1.0f,
+
+    // front face
+    -0.5f,-0.5f, 0.5f,   0.0f, 0.0f, 1.0f,    0.0f,0.0f,
+     0.5f,-0.5f, 0.5f,   0.0f, 0.0f, 1.0f,    1.0f,0.0f,
+     0.5f, 0.5f, 0.5f,   0.0f, 0.0f, 1.0f,    1.0f,1.0f,
+    -0.5f, 0.5f, 0.5f,   0.0f, 0.0f, 1.0f,    0.0f,1.0f,
+
+    // left face
+    -0.5f, 0.5f, 0.5f,  -1.0f, 0.0f, 0.0f,    1.0f,0.0f,
+    -0.5f, 0.5f,-0.5f,  -1.0f, 0.0f, 0.0f,    1.0f,1.0f,
+    -0.5f,-0.5f,-0.5f,  -1.0f, 0.0f, 0.0f,    0.0f,1.0f,
+    -0.5f,-0.5f, 0.5f,  -1.0f, 0.0f, 0.0f,    0.0f,0.0f,
+
+    // right face
+     0.5f, 0.5f, 0.5f,   1.0f, 0.0f, 0.0f,    1.0f,0.0f,
+     0.5f, 0.5f,-0.5f,   1.0f, 0.0f, 0.0f,    1.0f,1.0f,
+     0.5f,-0.5f,-0.5f,   1.0f, 0.0f, 0.0f,    0.0f,1.0f,
+     0.5f,-0.5f, 0.5f,   1.0f, 0.0f, 0.0f,    0.0f,0.0f,
+
+    // bottom face
+    -0.5f,-0.5f,-0.5f,   0.0f,-1.0f, 0.0f,    0.0f,1.0f,
+     0.5f,-0.5f,-0.5f,   0.0f,-1.0f, 0.0f,    1.0f,1.0f,
+     0.5f,-0.5f, 0.5f,   0.0f,-1.0f, 0.0f,    1.0f,0.0f,
+    -0.5f,-0.5f, 0.5f,   0.0f,-1.0f, 0.0f,    0.0f,0.0f,
+
+    // top face
+    -0.5f, 0.5f,-0.5f,   0.0f, 1.0f, 0.0f,    0.0f,1.0f,
+     0.5f, 0.5f,-0.5f,   0.0f, 1.0f, 0.0f,    1.0f,1.0f,
+     0.5f, 0.5f, 0.5f,   0.0f, 1.0f, 0.0f,    1.0f,0.0f,
+    -0.5f, 0.5f, 0.5f,   0.0f, 1.0f, 0.0f,    0.0f,0.0f,
 };
 
+
+
 // Indices for vertices order
-GLuint indices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
-	0, 1, 4,
-	1, 2, 4,
-	2, 3, 4,
-	3, 0, 4
+GLuint indices[] = {
+    0,1,2, 2,3,0,        // back
+    4,5,6, 6,7,4,        // front
+    8,9,10, 10,11,8,     // left
+    12,13,14, 14,15,12,  // right
+    16,17,18, 18,19,16,  // bottom
+    20,21,22, 22,23,20   // top
 };
+
 GLfloat cubeVertices[] = {
     // Portions           // Index
     -0.5f, -0.5f,  0.5f,  // 0: Front-Bottom-Left
@@ -169,19 +201,21 @@ int main(){
     glm::mat4 projection;
 
     
-   
+    model=glm::scale(model,glm::vec3(100.0f,1.0f,100.0f));
     projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,100.0f);
     //
     shaderProgram3.use();
     shaderProgram3.setMat4(2,GL_FALSE,projection);
-    shaderProgram3.setVec3(3,glm::vec3(1.0f,0.0f,0.0f));
+    shaderProgram3.setVec3(3,glm::vec3(1.0f,1.0f,1.0f));
+    shaderProgram3.setVec3(4,glm::vec3(0.0f,2.0f,0.0f));
 
     //
     shaderProgram2.use();
     shaderProgram2.setMat4(2,GL_FALSE,projection);
-    objModel=glm::translate(objModel,glm::vec3(1.0f,2.0f,0.0f));
+    objModel=glm::translate(objModel,glm::vec3(0.0f,2.0f,0.0f));
+    objModel=glm::scale(objModel,glm::vec3(0.5f,0.5f,0.5f));
     shaderProgram2.setMat4(0,GL_FALSE,objModel);
-    shaderProgram2.setVec3(3,glm::vec3(1.0f,0.0f,0.0f));
+    shaderProgram2.setVec3(3,glm::vec3(1.0f,1.0f,1.0f));
     
 
     
