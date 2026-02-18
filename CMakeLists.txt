@@ -75,7 +75,7 @@ if(WIN32)
    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${CMAKE_SOURCE_DIR}/dependencies/GLFW/lib-vc2022/glfw3.dll"
-        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/glfw3.dll"
+        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/glfw3.dll"
         COMMENT "Copying GLFW DLL to executable directory..."
     )
 endif()

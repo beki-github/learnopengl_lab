@@ -189,10 +189,11 @@ int main(){
     Shader shaderProgram3("shaders/shader.vert","shaders/shader.frag");
     Shader shaderProgram2("shaders/lightsource.vert","shaders/lightsource.frag");
 
-    const char* imgPath = "assets/bricks.jpg";
-    Texture popCat(imgPath, GL_TEXTURE_2D, GL_TEXTURE0, GL_UNSIGNED_BYTE);
-	popCat.texUnit(shaderProgram3, "tex0", 0);
-    popCat.Bind();
+
+    const char *imagePath2 ="assets/ceramic.png";
+    Texture ceramic(imagePath2, GL_TEXTURE_2D, GL_TEXTURE0, GL_UNSIGNED_BYTE);
+	ceramic.texUnit(shaderProgram3, "tex0", 0);
+    ceramic.Bind();
 
 
     glm::mat4 model=glm::mat4(1.0f);
@@ -202,7 +203,7 @@ int main(){
 
     
     model=glm::scale(model,glm::vec3(100.0f,1.0f,100.0f));
-    projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,100.0f);
+    projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,800.0f);
     //
     shaderProgram3.use();
     shaderProgram3.setMat4(2,GL_FALSE,projection);
@@ -233,11 +234,13 @@ int main(){
         processInput(window,glfwGetTime());
         view=camera.GetViewMatrix();
         VAO1.Bind();
+        ceramic.Bind();
         shaderProgram3.use();
         model=glm::translate(model,glm::vec3(0.0f,0.0f,0.0f));
         model=glm::rotate(model,glm::radians(0.03f),glm::vec3(0.0f,1.0f,0.0f));
         shaderProgram3.setMat4(0,GL_FALSE,model);
         shaderProgram3.setMat4(1,GL_FALSE,view);
+        shaderProgram3.setVec3(5,camera.Position);
         glDrawElements(GL_TRIANGLES,sizeof(indices)/sizeof(int),GL_UNSIGNED_INT,0);
         
         //
@@ -258,7 +261,7 @@ int main(){
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
-    popCat.Delete();
+    ceramic.Delete();
 
     //terminate glfw 
     glfwTerminate();
