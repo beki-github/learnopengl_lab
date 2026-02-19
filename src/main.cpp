@@ -122,6 +122,7 @@ float pitch = 0.0f;
 //
 Camera camera = Camera(cameraPos,cameraUp);
 
+
 int main(){
     //intalize glfw 
     glfwInit();
@@ -209,7 +210,8 @@ int main(){
     shaderProgram3.setMat4(2,GL_FALSE,projection);
     shaderProgram3.setVec3(3,glm::vec3(1.0f,1.0f,1.0f));
     shaderProgram3.setVec3(4,glm::vec3(0.0f,2.0f,0.0f));
-
+    Material gold = Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 52.0f);
+    shaderProgram3.setMaterial(gold);
     //
     shaderProgram2.use();
     shaderProgram2.setMat4(2,GL_FALSE,projection);
@@ -222,6 +224,8 @@ int main(){
     
 
     
+    
+
     glEnable(GL_DEPTH_TEST);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

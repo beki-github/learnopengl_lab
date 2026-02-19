@@ -78,6 +78,16 @@ void Shader::setMat4( const GLuint location, GLboolean transpose , glm::mat4 mat
 
 }
 
+void Shader::setMaterial( const Material& mat) const {
+    // We use string concatenation to target the struct members:
+    // "material.ambient", "material.diffuse", etc.
+
+	glUniform3fv(6, 1, glm::value_ptr(mat.ambient));   // Location 6
+    glUniform3fv(7, 1, glm::value_ptr(mat.diffuse));   // Location 7
+    glUniform3fv(8, 1, glm::value_ptr(mat.specular));  // Location 8
+    glUniform1f(9, mat.shininess);
+}
+
 
 
 

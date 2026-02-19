@@ -1,6 +1,15 @@
 #version 430 core
 out vec4 FragColor;
 
+struct Material{
+   vec3 ambient;
+   vec3 diffuse;
+   vec3 specular;
+   float shininess;
+};
+
+layout (location = 6) uniform Material material;
+
 
 in vec3 objColor;
 in vec2 texCoord;
@@ -13,19 +22,19 @@ uniform sampler2D tex0;
 
 void main()
 {  
-   float ambidentStrength=0.2f;
-   vec3 ambident=ambidentStrength*objColor;
+   
+   vec3 ambident=objColor*material.ambient;
    //calculation for diffuse lighting 
    vec3 lightDir =normalize(lightSourcePos-fragPos);
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,lightDir),0.0f);
-   vec3 diffuse=diff*objColor;
+   vec3 diffuse=(diff*material.diffuse)*objColor;
    //calculating the specular lighting 
    float specularStrength=1.0f;
    vec3 viewDir= normalize(viewPos-fragPos);
    vec3 reflectDir=reflect(-lightDir,norm);
-   float spec= pow(max(dot(viewDir,reflectDir),0.0f),1024);
-   vec3 specular=specularStrength*spec*objColor;
+   float spec= pow(max(dot(viewDir,reflectDir),0.0f),material.shininess);
+   vec3 specular=specularStrength*(spec*material.specular)*objColor;
    //calculating the final output
    vec4 texColor=texture(tex0,texCoord);
    vec4 result= vec4(specular+diffuse+ambident,1.0f)*texColor;

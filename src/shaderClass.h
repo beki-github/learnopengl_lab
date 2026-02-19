@@ -13,7 +13,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct Material{
+   glm::vec3 ambient;
+   glm::vec3 diffuse;
+   glm::vec3 specular;
+   float shininess;
 
+   Material(glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, float shine)
+        : ambient{amb}, diffuse{diff}, specular{spec}, shininess{shine}
+    {
+    }
+
+};
 
 class Shader {
 public:
@@ -25,6 +36,7 @@ public:
 	void setFloat(const std::string& name, float value) const;
     void setVec3(const GLuint location, glm::vec3 objColor) const;
 	void setMat4(const GLuint location, GLboolean transpose , glm::mat4 matrix);
+	void setMaterial(const Material& mat) const;
 	
 private:
 	void checkCompilationError(unsigned int shader, const std::string& type);
