@@ -211,8 +211,8 @@ int main(){
     shaderProgram3.setVec3(3,glm::vec3(1.0f,1.0f,1.0f));
     shaderProgram3.setVec3(4,glm::vec3(0.0f,2.0f,0.0f));
     Material gold = Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 52.0f);
-    shaderProgram3.setMaterial(gold);
-    //
+    shaderProgram3.setMaterial(gold,6);
+    //,
     shaderProgram2.use();
     shaderProgram2.setMat4(2,GL_FALSE,projection);
     objModel=glm::translate(objModel,glm::vec3(0.0f,2.0f,0.0f));

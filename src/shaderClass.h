@@ -26,6 +26,20 @@ struct Material{
 
 };
 
+struct Light {
+   glm::vec3 position;
+   glm::vec3 ambient;
+   glm::vec3 diffuse;
+   glm::vec3 specular;
+
+   Light(glm::vec3 pos,glm::vec3 amb,glm::vec3 diff, glm::vec3 spec)
+   :position{pos},ambient{amb},diffuse{diff},specular{spec}
+   {
+
+   }
+
+};
+
 class Shader {
 public:
 	unsigned int ID;
@@ -36,8 +50,8 @@ public:
 	void setFloat(const std::string& name, float value) const;
     void setVec3(const GLuint location, glm::vec3 objColor) const;
 	void setMat4(const GLuint location, GLboolean transpose , glm::mat4 matrix);
-	void setMaterial(const Material& mat) const;
-	
+	void setMaterial(const Material& mat,GLuint location) const;
+	void setLight(const Light& light,GLuint location) const;
 private:
 	void checkCompilationError(unsigned int shader, const std::string& type);
 };

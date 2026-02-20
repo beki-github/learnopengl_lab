@@ -78,18 +78,24 @@ void Shader::setMat4( const GLuint location, GLboolean transpose , glm::mat4 mat
 
 }
 
-void Shader::setMaterial( const Material& mat) const {
+void Shader::setMaterial( const Material& mat,GLuint location) const {
     // We use string concatenation to target the struct members:
     // "material.ambient", "material.diffuse", etc.
 
-	glUniform3fv(6, 1, glm::value_ptr(mat.ambient));   // Location 6
-    glUniform3fv(7, 1, glm::value_ptr(mat.diffuse));   // Location 7
-    glUniform3fv(8, 1, glm::value_ptr(mat.specular));  // Location 8
-    glUniform1f(9, mat.shininess);
+	glUniform3fv(location, 1, glm::value_ptr(mat.ambient));   // Location 6
+    glUniform3fv(location +1, 1, glm::value_ptr(mat.diffuse));   // Location 7
+    glUniform3fv(location +2, 1, glm::value_ptr(mat.specular));  // Location 8
+    glUniform1f(location +3, mat.shininess); //location 9
 }
 
+void Shader::setLight(const Light &light, GLuint location) const
+{
+	glUniform3fv(location, 1, glm::value_ptr(light.position));   // Location 6
+    glUniform3fv(location +1, 1, glm::value_ptr(light.ambient));   // Location 7
+    glUniform3fv(location +2, 1, glm::value_ptr(light.diffuse));  // Location 8
+    glUniform3fv(location +3,1,glm::value_ptr(light.specular));// location 9
 
-
+}
 
 void Shader::checkCompilationError(unsigned int shader, const std::string& type) {
 		int success;
