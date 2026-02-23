@@ -207,7 +207,8 @@ int main(){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
-    
+    planks.Bind();
+    planksSpec.Bind();
     while(!glfwWindowShouldClose(window)){
 
         glClearColor(0.039f, 0.059f, 0.122f,0.3f);
@@ -217,7 +218,7 @@ int main(){
         VAO1.Bind();
         
         shaderProgram3.use();
-        planks.Bind();
+
         model=glm::translate(model,glm::vec3(0.0f,0.0f,0.0f));
         model=glm::rotate(model,glm::radians(0.03f),glm::vec3(0.0f,1.0f,0.0f));
         shaderProgram3.setMat4(0,GL_FALSE,model);
