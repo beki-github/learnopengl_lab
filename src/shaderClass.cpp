@@ -90,10 +90,13 @@ void Shader::setMaterial( const Material& mat,GLuint location) const {
 
 void Shader::setLight(const Light &light, GLuint location) const
 {
-	glUniform3fv(location, 1, glm::value_ptr(light.position));   // Location 6
-    glUniform3fv(location +1, 1, glm::value_ptr(light.ambient));   // Location 7
-    glUniform3fv(location +2, 1, glm::value_ptr(light.diffuse));  // Location 8
-    glUniform3fv(location +3,1,glm::value_ptr(light.specular));// location 9
+	glUniform1f(location,light.cons);
+	glUniform1f(location+1,light.linear);
+	glUniform1f(location+2,light.quadratic);
+	glUniform3fv(location+3, 1, glm::value_ptr(light.direction));   // Location 6
+    glUniform3fv(location +4, 1, glm::value_ptr(light.ambient));   // Location 7
+    glUniform3fv(location +5, 1, glm::value_ptr(light.diffuse));  // Location 8
+    glUniform3fv(location +6,1,glm::value_ptr(light.specular));// location 12
 
 }
 

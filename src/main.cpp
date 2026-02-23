@@ -22,21 +22,63 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 float lastFrame=0.0f;
 float deltaTime;
 
-GLfloat vertices[] =
-{
-    //     COORDINATES     /        NORMALS         /   TexCoord  //
-    -1.0f, 0.0f,  1.0f,     0.0f, 1.0f, 0.0f,       0.0f, 0.0f,
-    -1.0f, 0.0f, -1.0f,     0.0f, 1.0f, 0.0f,       0.0f, 1.0f,
-     1.0f, 0.0f, -1.0f,     0.0f, 1.0f, 0.0f,       1.0f, 1.0f,
-     1.0f, 0.0f,  1.0f,     0.0f, 1.0f, 0.0f,       1.0f, 0.0f
-};
+   float vertices[] = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-// Indices for vertices order
-GLuint indices[] =
-{
-	0, 1, 2,
-	0, 2, 3
-};
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
+    };
+    // positions all containers
+    glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
 
 GLfloat cubeVertices[] = {
     // Portions           // Index
@@ -123,7 +165,6 @@ int main(){
     VAO1.Bind();
 
     VBO VBO1(vertices,sizeof(vertices));
-    EBO EBO1(indices,sizeof(indices));
     
     VAO1.linkAttrib(VBO1,0,3,GL_FLOAT,8*sizeof(float),(void*)0);
     VAO1.linkAttrib(VBO1,1,3,GL_FLOAT,8*sizeof(float),(void*)(sizeof(float)*3));
@@ -133,7 +174,6 @@ int main(){
 
     VAO1.Unbind();
     VBO1.Unbind();
-    EBO1.Unbind();
 
     //creating buffer object for the light source object
 
@@ -155,12 +195,12 @@ int main(){
     Shader shaderProgram2("shaders/lightsource.vert","shaders/lightsource.frag");
 
 
-    const char *imagePath2 ="assets/planks.png";
+    const char *imagePath2 ="assets/base.png";
     Texture planks(imagePath2, GL_TEXTURE_2D, 0, GL_UNSIGNED_BYTE);
 	planks.texUnit(shaderProgram3, "tex0",0);
 
 
-    const char *imagePath3 ="assets/planksSpec.png";
+    const char *imagePath3 ="assets/pec.png";
     Texture planksSpec(imagePath3, GL_TEXTURE_2D, 1, GL_UNSIGNED_BYTE);
     planksSpec.texUnit(shaderProgram3,"tex1",1);
 	
@@ -175,21 +215,22 @@ int main(){
     glm::mat4 projection;
 
     //light material 
-    Light light=Light(glm::vec3(0.0f,2.0f,0.0f),
-                     glm::vec3(1.0f,1.0f,1.0f),
-                     glm::vec3(1.0f,1.0f,1.0f),
+    Light light=Light(1.0f,0.09f,0.0032f,
+                     glm::vec3(0.0f,2.0f,0.0f),
+                     glm::vec3(0.2f,0.2f,0.2f),
+                     glm::vec3(0.5f,0.5f,0.5f),
                      glm::vec3(1.0f,1.0f,1.0f));
 
     
-    model=glm::scale(model,glm::vec3(2.0f,1.0f,2.0f));
+    
     projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,800.0f);
     //
     shaderProgram3.use();
     shaderProgram3.setMat4(2,GL_FALSE,projection);
     Material gold = Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 4);
-    shaderProgram3.setMaterial(gold,6);
-    shaderProgram3.setLight(light,10);
-    //,
+    shaderProgram3.setLight(light,6);
+
+
     shaderProgram2.use();
     shaderProgram2.setMat4(2,GL_FALSE,projection);
     objModel=glm::translate(objModel,glm::vec3(0.0f,2.0f,0.0f));
@@ -219,15 +260,21 @@ int main(){
         
         shaderProgram3.use();
 
-        model=glm::translate(model,glm::vec3(0.0f,0.0f,0.0f));
-        model=glm::rotate(model,glm::radians(0.03f),glm::vec3(0.0f,1.0f,0.0f));
-        shaderProgram3.setMat4(0,GL_FALSE,model);
         shaderProgram3.setMat4(1,GL_FALSE,view);
         shaderProgram3.setVec3(5,camera.Position);
-        glDrawElements(GL_TRIANGLES,sizeof(indices)/sizeof(int),GL_UNSIGNED_INT,0);
-        
-        //
 
+        for (unsigned int i=0;i<10;i++){
+        
+        glm::mat4 model=glm::mat4(1.0f);
+        float angle=i*20.0f;
+        model=glm::translate(model,cubePositions[i]);
+        model=glm::rotate(model,glm::radians(angle),glm::vec3(1.0f, 0.3f, 0.5f));
+        shaderProgram3.setMat4(0,GL_FALSE,model);
+        glDrawArrays(GL_TRIANGLES,0,36);
+
+        }
+
+       
         VAO2.Bind();
         shaderProgram2.use();
         shaderProgram2.setMat4(1,GL_FALSE,view);
@@ -243,7 +290,6 @@ int main(){
     
     VAO1.Delete();
     VBO1.Delete();
-    EBO1.Delete();
     planks.Delete();
 
     //terminate glfw 
