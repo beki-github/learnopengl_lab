@@ -2,21 +2,30 @@
 out vec4 FragColor;
 
 struct Material{
+
+
    vec3 ambient;
    vec3 diffuse;
    vec3 specular;
    float shininess;
+
+
 };
+
+
 struct Light {
 
    float cons;
    float linear;
    float quadratic;
 
+   vec3 direction;
    vec3 position;
    vec3 ambient;
    vec3 diffuse;
    vec3 specular;
+
+
 };
 
 layout (location= 6) uniform Light light;
@@ -33,12 +42,13 @@ uniform sampler2D tex1;
 
 void main()
 {  
-   
-  
+   //calculating the theta for spotlight effect
+   vec3 lightDir =normalize(fragPos-light.position);
+   float theta=dot(lightDir,normalize(light.direction)); //light.direction == camera.Front
 
-   vec3 ambient=light.ambient*texture(tex0,texCoord).rgb;
+   if (theta>cos(radians(12.5))){
+    vec3 ambient=light.ambient*texture(tex0,texCoord).rgb;
    //calculation for diffuse lighting 
-   vec3 lightDir =normalize(light.position-fragPos);
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,lightDir),0.0f);
    vec3 diffuse=light.diffuse*diff*texture(tex0,texCoord).rgb;
@@ -53,14 +63,22 @@ void main()
    float distance=length(light.position-fragPos);
    float attunation=1.0/(light.cons + light.linear*(distance)+light.quadratic*(distance*distance));
 
-
    ambient*=attunation;
    diffuse*=attunation;
    specular*=attunation;
 
-
    //calculating the final output
    vec3 result = ambient+diffuse+specular;
    FragColor =vec4(result,1.0);
-   
+   }
+
+
+   else{
+
+   vec3 ambient=light.ambient*texture(tex0,texCoord).rgb;
+   FragColor=vec4(ambient,1.0);
+
+   }
+  
+
 }

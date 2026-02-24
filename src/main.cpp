@@ -215,8 +215,9 @@ int main(){
     glm::mat4 projection;
 
     //light material 
-    Light light=Light(1.0f,0.09f,0.0032f,
-                     glm::vec3(0.0f,2.0f,0.0f),
+    Light light=Light(1.0f,0.009f,0.00032f,
+                     camera.Position,
+                     camera.Front,
                      glm::vec3(0.2f,0.2f,0.2f),
                      glm::vec3(0.5f,0.5f,0.5f),
                      glm::vec3(1.0f,1.0f,1.0f));
@@ -259,7 +260,13 @@ int main(){
         VAO1.Bind();
         
         shaderProgram3.use();
-
+         Light light=Light(1.0f,0.009f,0.00032f,
+                     camera.Position,
+                     camera.Front,
+                     glm::vec3(0.2f,0.2f,0.2f),
+                     glm::vec3(0.5f,0.5f,0.5f),
+                     glm::vec3(1.0f,1.0f,1.0f));
+        shaderProgram3.setLight(light,6);
         shaderProgram3.setMat4(1,GL_FALSE,view);
         shaderProgram3.setVec3(5,camera.Position);
 
@@ -275,10 +282,10 @@ int main(){
         }
 
        
-        VAO2.Bind();
-        shaderProgram2.use();
-        shaderProgram2.setMat4(1,GL_FALSE,view);
-        glDrawElements(GL_TRIANGLES,sizeof(cubeIndices)/sizeof(int),GL_UNSIGNED_INT,0);        
+        // VAO2.Bind();
+        // shaderProgram2.use();
+        // shaderProgram2.setMat4(1,GL_FALSE,view);
+        // glDrawElements(GL_TRIANGLES,sizeof(cubeIndices)/sizeof(int),GL_UNSIGNED_INT,0);        
         glfwSwapBuffers(window);
 
         glfwPollEvents();

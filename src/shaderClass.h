@@ -34,12 +34,13 @@ struct Light {
 
 
    glm::vec3 direction;
+   glm::vec3 position;
    glm::vec3 ambient;
    glm::vec3 diffuse;
    glm::vec3 specular;
 
-   Light(float constant,float lin,float quad,glm::vec3 dir,glm::vec3 amb,glm::vec3 diff, glm::vec3 spec)
-    :cons{constant},linear{lin},quadratic{quad},direction{dir},ambient{amb},diffuse{diff},specular{spec}
+   Light(float constant,float lin,float quad,glm::vec3 dir,glm::vec3 pos,glm::vec3 amb,glm::vec3 diff, glm::vec3 spec)
+    :cons{constant},linear{lin},quadratic{quad},direction{dir},position{pos},ambient{amb},diffuse{diff},specular{spec}
    {
 
    }
