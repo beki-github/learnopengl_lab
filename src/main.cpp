@@ -219,7 +219,7 @@ int main(){
    
 
     
-     Light light=Light(
+     spotLight light=spotLight(
                      camera.Position,
                      camera.Front,
                      glm::vec3(0.2f,0.2f,0.2f),
@@ -231,7 +231,6 @@ int main(){
     shaderProgram3.use();
     shaderProgram3.setMat4(2,GL_FALSE,projection);
     Material gold = Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 4);
-    shaderProgram3.setLight(light,6);
 
 
     shaderProgram2.use();
@@ -264,7 +263,7 @@ int main(){
         shaderProgram3.use();
         light.direction=camera.Position;
         light.position=camera.Front;
-        shaderProgram3.setLight(light,6);
+        shaderProgram3.setSpotLight(light,6);
         shaderProgram3.setMat4(1,GL_FALSE,view);
         shaderProgram3.setVec3(5,camera.Position);
 

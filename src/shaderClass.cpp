@@ -64,8 +64,8 @@ void Shader::setInt(const std::string& name, int value)const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setFloat(const std::string& name, float value)const {
-	glUniform1f(glGetUniformLocation(ID, name.c_str()),value);
+void Shader::setFloat(const GLuint location, float value)const {
+	glUniform1f(location,value);
 }
 
 void Shader::setVec3(const GLuint location, glm::vec3 objColor) const {
@@ -88,14 +88,31 @@ void Shader::setMaterial( const Material& mat,GLuint location) const {
     glUniform1f(location +3, mat.shininess); //location 9
 }
 
-void Shader::setLight(const Light &light, GLuint location) const
+void Shader::setSpotLight(const spotLight &light, GLuint location) const
 {
-	glUniform3fv(location, 1, glm::value_ptr(light.direction));   // Location 6
-	glUniform3fv(location+1,1,glm::value_ptr(light.position));
-    glUniform3fv(location+2, 1, glm::value_ptr(light.ambient));   // Location 7
-    glUniform3fv(location+3, 1, glm::value_ptr(light.diffuse));  // Location 8
-    glUniform3fv(location+4,1,glm::value_ptr(light.specular));// location 12
+	// glUniform3fv(location, 1, glm::value_ptr(light.direction));   // Location 6
+	// glUniform3fv(location+1,1,glm::value_ptr(light.position));
+    // glUniform3fv(location+2, 1, glm::value_ptr(light.ambient));   // Location 7
+    // glUniform3fv(location+3, 1, glm::value_ptr(light.diffuse));  // Location 8
+    // glUniform3fv(location+4,1,glm::value_ptr(light.specular));// location 12
 
+	setVec3(location,light.direction);
+	setVec3(location+1,light.position);
+	setVec3(location+2,light.ambient);
+	setVec3(location+3,light.diffuse);
+	setVec3(location+4,light.specular);
+
+}
+
+void Shader::setPointLight(const pointLight &pointLight, GLuint location)
+{
+	setFloat(location,pointLight.constant);
+	setFloat(location+1,pointLight.linear);
+	setFloat(location+2,pointLight.quadratic);
+	setVec3(location+3,pointLight.position);
+	setVec3(location+4,pointLight.ambient);
+	setVec3(location+2,pointLight.diffuse);
+	setVec3(location+2,pointLight.specular);
 }
 
 void Shader::checkCompilationError(unsigned int shader, const std::string& type) {
