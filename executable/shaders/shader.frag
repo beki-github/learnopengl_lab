@@ -15,9 +15,8 @@ struct Material{
 
 struct Light {
 
-
-   vec3 direction;
    vec3 position;
+   vec3 direction;
    vec3 ambient;
    vec3 diffuse;
    vec3 specular;
@@ -39,17 +38,19 @@ uniform sampler2D tex1;
 
 void main()
 {  
-   float outercone=0.90f;
-   float innercone=0.95f;
+   float outercone=0.97f;
+   float innercone=0.999f;
+   vec3 lightToFrag = normalize(fragPos - light.position); // For the spotlight theta
+    vec3 fragToLight = normalize(light.position - fragPos);
    //calculating the theta for spotlight effect
    vec3 lightDir =normalize(fragPos-light.position);
-   float theta=dot(lightDir,normalize(light.direction)); 
+   float theta=dot(lightToFrag,normalize(light.direction)); 
    float intent=clamp((theta-outercone)/(innercone-outercone),0.0f,1.0f);
  
    vec3 ambient=light.ambient*texture(tex0,texCoord).rgb;
    //calculation for diffuse lighting 
    vec3 norm = normalize(Normal);
-   float diff= max(dot(norm,lightDir),0.0f);
+   float diff= max(dot(norm,fragToLight),0.0f);
    vec3 diffuse=light.diffuse*diff*texture(tex0,texCoord).rgb;
 
    //calculating the specular lighting 

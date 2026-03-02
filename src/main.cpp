@@ -262,12 +262,6 @@ int main(){
         VAO1.Bind();
         
         shaderProgram3.use();
-        //  Light light=Light(
-        //              camera.Position,
-        //              camera.Front,
-        //              glm::vec3(0.2f,0.2f,0.2f),
-        //              glm::vec3(0.5f,0.5f,0.5f),
-        //              glm::vec3(1.0f,1.0f,1.0f));
         light.direction=camera.Position;
         light.position=camera.Front;
         shaderProgram3.setLight(light,6);
