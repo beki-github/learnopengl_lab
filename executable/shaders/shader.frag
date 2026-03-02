@@ -33,8 +33,8 @@ struct pointLight{
    vec3 specular;
 
 };
-layout (location= 6) uniform spotLight spotlight;
-layout (location=11) uniform pointLight pointlight;
+layout (location= 10) uniform spotLight spotlight;
+layout (location=20) uniform pointLight pointlight;
 
 
 in vec2 texCoord;
@@ -117,7 +117,7 @@ vec3 calcPointLight(){
 void main()
 {  
    
-   vec3 result = calcSpotLight();
+   vec3 result = calcPointLight()+calcSpotLight();
    FragColor =vec4(result,1.0);
 
   

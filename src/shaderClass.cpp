@@ -106,8 +106,8 @@ void Shader::setPointLight(const pointLight &pointLight, GLuint location)
 	setFloat(location+2,pointLight.quadratic);
 	setVec3(location+3,pointLight.position);
 	setVec3(location+4,pointLight.ambient);
-	setVec3(location+2,pointLight.diffuse);
-	setVec3(location+2,pointLight.specular);
+	setVec3(location+5,pointLight.diffuse);
+	setVec3(location+6,pointLight.specular);
 }
 
 void Shader::checkCompilationError(unsigned int shader, const std::string& type) {

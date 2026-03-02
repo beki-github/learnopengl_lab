@@ -225,20 +225,29 @@ int main(){
                      glm::vec3(0.2f,0.2f,0.2f),
                      glm::vec3(0.5f,0.5f,0.5f),
                      glm::vec3(1.0f,1.0f,1.0f));
-    
+
+     pointLight light1=pointLight(
+        1.0f,0.09f,0.0032f,
+        glm::vec3(0.0f,0.0f,0.0f),
+        glm::vec3(0.2f,0.2f,0.2f),
+        glm::vec3(0.5f,0.5f,0.5f),
+        glm::vec3(1.0f,1.0f,1.0f));
+
     projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,800.0f);
     //
     shaderProgram3.use();
     shaderProgram3.setMat4(2,GL_FALSE,projection);
+    shaderProgram3.setPointLight(light1,20);
     Material gold = Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 4);
 
 
     shaderProgram2.use();
     shaderProgram2.setMat4(2,GL_FALSE,projection);
-    objModel=glm::translate(objModel,glm::vec3(0.0f,2.0f,0.0f));
+    objModel=glm::translate(objModel,glm::vec3(0.0f,0.0f,0.0f));
     objModel=glm::scale(objModel,glm::vec3(0.5f,0.5f,0.5f));
     shaderProgram2.setMat4(0,GL_FALSE,objModel);
     shaderProgram2.setVec3(3,glm::vec3(1.0f,1.0f,1.0f));
+   
     
 
     
@@ -263,7 +272,7 @@ int main(){
         shaderProgram3.use();
         light.direction=camera.Position;
         light.position=camera.Front;
-        shaderProgram3.setSpotLight(light,6);
+        shaderProgram3.setSpotLight(light,10);
         shaderProgram3.setMat4(1,GL_FALSE,view);
         shaderProgram3.setVec3(5,camera.Position);
 
@@ -276,7 +285,13 @@ int main(){
         shaderProgram3.setMat4(0,GL_FALSE,model);
         glDrawArrays(GL_TRIANGLES,0,36);
 
-        }      
+        }   
+        
+        shaderProgram2.use();
+        shaderProgram2.setMat4(1,GL_FALSE,view);
+        VAO2.Bind();
+        EBO2.Bind();
+        glDrawElements(GL_TRIANGLES,sizeof(cubeIndices)/sizeof(int),GL_UNSIGNED_INT,0);
         glfwSwapBuffers(window);
 
         glfwPollEvents();
