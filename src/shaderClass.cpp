@@ -90,11 +90,6 @@ void Shader::setMaterial( const Material& mat,GLuint location) const {
 
 void Shader::setSpotLight(const spotLight &light, GLuint location) const
 {
-	// glUniform3fv(location, 1, glm::value_ptr(light.direction));   // Location 6
-	// glUniform3fv(location+1,1,glm::value_ptr(light.position));
-    // glUniform3fv(location+2, 1, glm::value_ptr(light.ambient));   // Location 7
-    // glUniform3fv(location+3, 1, glm::value_ptr(light.diffuse));  // Location 8
-    // glUniform3fv(location+4,1,glm::value_ptr(light.specular));// location 12
 
 	setVec3(location,light.direction);
 	setVec3(location+1,light.position);
