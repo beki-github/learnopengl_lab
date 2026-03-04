@@ -56,7 +56,7 @@ vec3 calcSpotLight(){
    float theta=dot(lightToFrag,normalize(spotlight.direction)); 
    float intent=clamp((theta-outercone)/(innercone-outercone),0.0f,1.0f);
  
-   vec3 ambient=spotlight.ambient*texture(tex0,texCoord).rgb;
+   vec3 ambient=0.0005f*spotlight.ambient*texture(tex0,texCoord).rgb;
    //calculation for diffuse lighting 
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,fragToLight),0.0f);
@@ -69,9 +69,9 @@ vec3 calcSpotLight(){
    float spec= pow(max(dot(viewDir,reflectDir),0.0f),64);
    vec3 specular=spotlight.specular*spec*texture(tex1,texCoord).rgb;
    // for point light 
-   ambient;
-   diffuse*=intent*2.5f;
-   specular*=intent*2.5f;
+   ambient*=intent;
+   diffuse*=intent;
+   specular*=intent;
 
    //calculating the final output
    vec3 result = ambient+diffuse+specular;
@@ -116,10 +116,8 @@ vec3 calcPointLight(){
 
 void main()
 {  
-   
    vec3 result = calcPointLight()+calcSpotLight();
    FragColor =vec4(result,1.0);
-
   
 
 }

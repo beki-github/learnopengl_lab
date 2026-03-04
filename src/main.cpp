@@ -228,10 +228,10 @@ int main(){
 
      pointLight light1=pointLight(
         1.0f,0.09f,0.0032f,
-        glm::vec3(0.0f,0.0f,0.0f),
-        glm::vec3(0.2f,0.2f,0.2f),
-        glm::vec3(0.5f,0.5f,0.5f),
-        glm::vec3(1.0f,1.0f,1.0f));
+        glm::vec3(0.0f,2.0f,0.0f),
+        glm::vec3(0.1f,0.1f,0.1f),
+        glm::vec3(0.7f,0.0f,0.0f),
+        glm::vec3(1.0f,0.0f,0.0f));
 
     projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,800.0f);
     //
@@ -246,13 +246,7 @@ int main(){
     objModel=glm::translate(objModel,glm::vec3(0.0f,0.0f,0.0f));
     objModel=glm::scale(objModel,glm::vec3(0.5f,0.5f,0.5f));
     shaderProgram2.setMat4(0,GL_FALSE,objModel);
-    shaderProgram2.setVec3(3,glm::vec3(1.0f,1.0f,1.0f));
-   
-    
-
-    
-
-    
+    shaderProgram2.setVec3(3,glm::vec3(1.0f,0.0f,0.0f));
     
 
     glEnable(GL_DEPTH_TEST);
@@ -276,16 +270,27 @@ int main(){
         shaderProgram3.setMat4(1,GL_FALSE,view);
         shaderProgram3.setVec3(5,camera.Position);
 
-        for (unsigned int i=3;i<10;i++){
-        
+       const float RADIUS=3.0f;
+       const float widith=1.0f;
+       const float theta=2*glm::asin(widith/(2*RADIUS));
+       const GLuint num= 3.14159253f/glm::asin(widith/(2*RADIUS));
+
+
+        for (unsigned int i=0;i<num;i++){
+      
+        float angle=i*theta;
+        float x=RADIUS*glm::cos(angle);
+        float y=RADIUS*glm::sin(angle);
+        float z=0.0f;
+
         glm::mat4 model=glm::mat4(1.0f);
-        float angle=i*20.0f;
-        model=glm::translate(model,cubePositions[i]);
-        model=glm::rotate(model,glm::radians(angle),glm::vec3(1.0f, 0.3f, 0.5f));
+        model=glm::translate(model,glm::vec3(x,y,z));
+        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
         shaderProgram3.setMat4(0,GL_FALSE,model);
         glDrawArrays(GL_TRIANGLES,0,36);
 
         }   
+    
         
         shaderProgram2.use();
         shaderProgram2.setMat4(1,GL_FALSE,view);
