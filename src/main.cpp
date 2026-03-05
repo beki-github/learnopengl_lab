@@ -190,8 +190,6 @@ int main(){
     VBO2.Unbind();
     EBO2.Unbind();
     
-    
-
     Shader shaderProgram3("shaders/shader.vert","shaders/shader.frag");
     Shader shaderProgram2("shaders/lightsource.vert","shaders/lightsource.frag");
 
@@ -227,7 +225,7 @@ int main(){
                      glm::vec3(1.0f,1.0f,1.0f));
 
      pointLight light1=pointLight(
-        1.0f,0.09f,0.0032f,
+        1.0f,0.009f,0.00032f,
         glm::vec3(0.0f,2.0f,0.0f),
         glm::vec3(0.1f,0.1f,0.1f),
         glm::vec3(0.7f,0.0f,0.0f),
@@ -271,25 +269,26 @@ int main(){
         shaderProgram3.setVec3(5,camera.Position);
 
        const float RADIUS=3.0f;
-       const float widith=1.0f;
+       const float widith=1.5f;
        const float theta=2*glm::asin(widith/(2*RADIUS));
        const GLuint num= 3.14159253f/glm::asin(widith/(2*RADIUS));
 
-
+        for(unsigned int j=0;j<4;j++){
         for (unsigned int i=0;i<num;i++){
-      
         float angle=i*theta;
-        float x=RADIUS*glm::cos(angle);
-        float y=RADIUS*glm::sin(angle);
-        float z=0.0f;
-
+        float x=RADIUS*glm::sin(angle);
+        float y=(float)j;
+        float z=RADIUS*glm::cos(angle);
         glm::mat4 model=glm::mat4(1.0f);
+        model=glm::rotate(model,(float)glfwGetTime(),glm::vec3(0.0f,1.0f,0.0f));
         model=glm::translate(model,glm::vec3(x,y,z));
-        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+        // model = glm::rotate(model,  glm::radians(static_cast<float>(glfwGetTime()*10.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
         shaderProgram3.setMat4(0,GL_FALSE,model);
         glDrawArrays(GL_TRIANGLES,0,36);
+        } 
 
-        }   
+        }
+       
     
         
         shaderProgram2.use();

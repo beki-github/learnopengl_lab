@@ -38,6 +38,8 @@ add_executable(
     src/Texture.cpp
     src/Camera.h
     src/Camera.cpp
+    src/mesh.h
+    src/mesh.cpp
     src/Debugger.h
 )
 

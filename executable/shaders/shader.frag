@@ -12,7 +12,6 @@ struct Material{
 
 };
 
-
 struct spotLight {
 
    vec3 position;
@@ -56,11 +55,11 @@ vec3 calcSpotLight(){
    float theta=dot(lightToFrag,normalize(spotlight.direction)); 
    float intent=clamp((theta-outercone)/(innercone-outercone),0.0f,1.0f);
  
-   vec3 ambient=0.0005f*spotlight.ambient*texture(tex0,texCoord).rgb;
+   vec3 ambient=spotlight.ambient*texture(tex0,texCoord).rgb;
    //calculation for diffuse lighting 
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,fragToLight),0.0f);
-   vec3 diffuse=spotlight.diffuse*diff*texture(tex0,texCoord).rgb;
+   vec3 diffuse=spotlight.diffuse*diff*texture(tex1,texCoord).rgb;
 
    //calculating the specular lighting 
    float specularStrength=0.5f;
@@ -91,13 +90,13 @@ vec3 calcPointLight(){
    //calculation for diffuse lighting 
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,fragToLight),0.0f);
-   vec3 diffuse=pointlight.diffuse*diff*texture(tex0,texCoord).rgb;
+   vec3 diffuse=pointlight.diffuse*diff*texture(tex1,texCoord).rgb;
 
    //calculating the specular lighting 
    float specularStrength=0.5f;
    vec3 viewDir= normalize(viewPos-fragPos);
    vec3 reflectDir=reflect(-lightDir,norm);
-   float spec= pow(max(dot(viewDir,reflectDir),0.0f),64);
+   float spec= pow(max(dot(viewDir,reflectDir),0.0f),128);
    vec3 specular=pointlight.specular*spec*texture(tex1,texCoord).rgb;
    // attuntation for point light 
     float distance    = length(pointlight.position - fragPos);
