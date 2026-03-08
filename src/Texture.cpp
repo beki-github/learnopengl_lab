@@ -1,6 +1,6 @@
 #include"Texture.h"
 
-Texture::Texture(const char* imagePath, GLenum texType, GLuint slot, GLenum pixelType)
+Texture::Texture(const char* imagePath, const char * texType, GLuint slot)
 {
 	// Assigns the type of the texture ot the texture object
 	type = texType;
@@ -17,17 +17,17 @@ Texture::Texture(const char* imagePath, GLenum texType, GLuint slot, GLenum pixe
 	// Assigns the texture to a Texture Unit
 	glActiveTexture(GL_TEXTURE0 + slot);
 	unit = slot;
-	glBindTexture(texType, ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
 	// Assigns the texture to a Texture Unit
 	//
-	glBindTexture(texType, ID);
-	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, ID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// Configures the type of algorithm that is used to make the image smaller or bigger
-	glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Assigns the image to the OpenGL Texture object
 	if (bytes) {
@@ -40,9 +40,9 @@ Texture::Texture(const char* imagePath, GLenum texType, GLuint slot, GLenum pixe
         format = GL_RED;
     else
         format = GL_RGB;
-		glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, format, GL_UNSIGNED_BYTE, bytes);
 		// Generates MipMaps
-		glGenerateMipmap(texType);
+		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
 		std::cout << "ERROR";
@@ -68,14 +68,14 @@ void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 void Texture::Bind()
 {   
 	glActiveTexture(GL_TEXTURE0+unit);
-	glBindTexture(type, ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
 	
 
 }
 
 void Texture::Unbind()
 {
-	glBindTexture(type, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::Delete()

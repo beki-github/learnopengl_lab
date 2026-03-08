@@ -41,8 +41,9 @@ in vec3 Normal;
 in vec3 fragPos;
 in vec3 viewPos;
 
-uniform sampler2D tex0;
-uniform sampler2D tex1;
+uniform sampler2D diffuse0;
+
+uniform sampler2D specular0;
 
 vec3 calcSpotLight(){
 
@@ -55,18 +56,18 @@ vec3 calcSpotLight(){
    float theta=dot(lightToFrag,normalize(spotlight.direction)); 
    float intent=clamp((theta-outercone)/(innercone-outercone),0.0f,1.0f);
  
-   vec3 ambient=spotlight.ambient*texture(tex0,texCoord).rgb;
+   vec3 ambient=spotlight.ambient*texture(diffuse0,texCoord).rgb;
    //calculation for diffuse lighting 
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,fragToLight),0.0f);
-   vec3 diffuse=spotlight.diffuse*diff*texture(tex1,texCoord).rgb;
+   vec3 diffuse=spotlight.diffuse*diff*texture(diffuse0,texCoord).rgb;
 
    //calculating the specular lighting 
    float specularStrength=0.5f;
    vec3 viewDir= normalize(viewPos-fragPos);
    vec3 reflectDir=reflect(-lightDir,norm);
    float spec= pow(max(dot(viewDir,reflectDir),0.0f),64);
-   vec3 specular=spotlight.specular*spec*texture(tex1,texCoord).rgb;
+   vec3 specular=spotlight.specular*spec*texture(specular0,texCoord).rgb;
    // for point light 
    ambient*=intent;
    diffuse*=intent;
@@ -86,18 +87,18 @@ vec3 calcPointLight(){
    //calculating the theta for spotlight effect
    vec3 lightDir =normalize(fragPos-pointlight.position);
  
-   vec3 ambient=pointlight.ambient*texture(tex0,texCoord).rgb;
+   vec3 ambient=pointlight.ambient*texture(specular0,texCoord).rgb;
    //calculation for diffuse lighting 
    vec3 norm = normalize(Normal);
    float diff= max(dot(norm,fragToLight),0.0f);
-   vec3 diffuse=pointlight.diffuse*diff*texture(tex1,texCoord).rgb;
+   vec3 diffuse=pointlight.diffuse*diff*texture(diffuse0,texCoord).rgb;
 
    //calculating the specular lighting 
    float specularStrength=0.5f;
    vec3 viewDir= normalize(viewPos-fragPos);
    vec3 reflectDir=reflect(-lightDir,norm);
    float spec= pow(max(dot(viewDir,reflectDir),0.0f),128);
-   vec3 specular=pointlight.specular*spec*texture(tex1,texCoord).rgb;
+   vec3 specular=pointlight.specular*spec*texture(specular0,texCoord).rgb;
    // attuntation for point light 
     float distance    = length(pointlight.position - fragPos);
     float attenuation = 1.0 / (pointlight.constant + pointlight.linear * distance + 

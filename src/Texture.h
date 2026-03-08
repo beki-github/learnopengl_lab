@@ -12,9 +12,9 @@ class Texture
 {
 public:
 	GLuint ID;
-	GLenum type;
+	const char * type;
 	GLuint unit;
-	Texture(const char* imagePath, GLenum texType, GLuint slot, GLenum pixelType);
+	Texture(const char* imagePath, const char * texType, GLuint slot);
 
 	// Assigns a texture unit to a texture
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);

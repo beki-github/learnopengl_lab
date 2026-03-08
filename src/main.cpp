@@ -6,14 +6,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-#include "VAO.h"
-#include "VBO.h"
-#include "EBO.h"
-#include "Texture.h"
 #include "shaderClass.h"
 #include "Camera.h"
 #include "Debugger.h"
+#include "model.h"
 
 
 void processInput(GLFWwindow* window, float currentTime);
@@ -22,98 +18,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 //gloabal variable intalization 
 float lastFrame=0.0f;
 float deltaTime;
-
-   float vertices[] = {
-        // positions          // normals           // texture coords
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
-    };
-    // positions all containers
-    glm::vec3 cubePositions[] = {
-        glm::vec3( 0.0f,  0.0f,  0.0f),
-        glm::vec3( 2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3( 2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3( 1.3f, -2.0f, -2.5f),
-        glm::vec3( 1.5f,  2.0f, -2.5f),
-        glm::vec3( 1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
-
-GLfloat cubeVertices[] = {
-    // Portions           // Index
-    -0.5f, -0.5f,  0.5f,  // 0: Front-Bottom-Left
-     0.5f, -0.5f,  0.5f,  // 1: Front-Bottom-Right
-     0.5f,  0.5f,  0.5f,  // 2: Front-Top-Right
-    -0.5f,  0.5f,  0.5f,  // 3: Front-Top-Left
-    -0.5f, -0.5f, -0.5f,  // 4: Back-Bottom-Left
-     0.5f, -0.5f, -0.5f,  // 5: Back-Bottom-Right
-     0.5f,  0.5f, -0.5f,  // 6: Back-Top-Right
-    -0.5f,  0.5f, -0.5f   // 7: Back-Top-Left
-};
-
-GLuint cubeIndices[] = {
-    // Front face
-    0, 1, 2,
-    0, 2, 3,
-    // Right face
-    1, 5, 6,
-    1, 6, 2,
-    // Back face
-    5, 4, 7,
-    5, 7, 6,
-    // Left face
-    4, 0, 3,
-    4, 3, 7,
-    // Top face
-    3, 2, 6,
-    3, 6, 7,
-    // Bottom face
-    4, 5, 1,
-    4, 1, 0
-};
-
 
 //global intial states for the camera
 glm::vec3 cameraPos= glm::vec3(0.0f,0.25f,6.0f);
@@ -162,51 +66,11 @@ int main(){
 
     glViewport(0,0,windowWidth,windowHeight);
      
-    VAO VAO1;
-    VAO1.Bind();
-
-    VBO VBO1(vertices,sizeof(vertices));
-    
-    VAO1.linkAttrib(VBO1,0,3,GL_FLOAT,8*sizeof(float),(void*)0);
-    VAO1.linkAttrib(VBO1,1,3,GL_FLOAT,8*sizeof(float),(void*)(sizeof(float)*3));
-    VAO1.linkAttrib(VBO1,2,2,GL_FLOAT,8*sizeof(float),(void*)(sizeof(float)*6));
-    
-
-
-    VAO1.Unbind();
-    VBO1.Unbind();
-
-    //creating buffer object for the light source object
-
-    VAO VAO2;
-    VAO2.Bind();
-
-    VBO VBO2(cubeVertices,sizeof(cubeVertices));
-    EBO EBO2(cubeIndices,sizeof(cubeIndices));
-
-    VAO2.linkAttrib(VBO2,0,3,GL_FLOAT,3*sizeof(float),(void *)0);
-
-    VAO2.Unbind();
-    VBO2.Unbind();
-    EBO2.Unbind();
+   
     
     Shader shaderProgram3("shaders/shader.vert","shaders/shader.frag");
     Shader shaderProgram2("shaders/lightsource.vert","shaders/lightsource.frag");
-
-
-    const char *imagePath2 ="assets/base.png";
-    Texture planks(imagePath2, GL_TEXTURE_2D, 0, GL_UNSIGNED_BYTE);
-	planks.texUnit(shaderProgram3, "tex0",0);
-
-
-    const char *imagePath3 ="assets/pec.png";
-    Texture planksSpec(imagePath3, GL_TEXTURE_2D, 1, GL_UNSIGNED_BYTE);
-    planksSpec.texUnit(shaderProgram3,"tex1",1);
 	
-
-
-    
-
 
     glm::mat4 model=glm::mat4(1.0f);
     glm::mat4 objModel=glm::mat4(1.0f);
@@ -236,7 +100,6 @@ int main(){
     shaderProgram3.use();
     shaderProgram3.setMat4(2,GL_FALSE,projection);
     shaderProgram3.setPointLight(light1,20);
-    Material gold = Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 4);
 
 
     shaderProgram2.use();
@@ -251,51 +114,32 @@ int main(){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
-    planks.Bind();
-    planksSpec.Bind();
+
+    Model bunny("assets/model/scroll/scene.gltf");
+    
     while(!glfwWindowShouldClose(window)){
 
         glClearColor(0.039f, 0.059f, 0.122f,0.3f);
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         processInput(window,glfwGetTime());
         view=camera.GetViewMatrix();
-        VAO1.Bind();
         
         shaderProgram3.use();
         light.direction=camera.Position;
         light.position=camera.Front;
         shaderProgram3.setSpotLight(light,10);
-        shaderProgram3.setMat4(1,GL_FALSE,view);
         shaderProgram3.setVec3(5,camera.Position);
 
-       const float RADIUS=3.0f;
-       const float widith=1.5f;
-       const float theta=2*glm::asin(widith/(2*RADIUS));
-       const GLuint num= 3.14159253f/glm::asin(widith/(2*RADIUS));
+       
 
-        for(unsigned int j=0;j<4;j++){
-        for (unsigned int i=0;i<num;i++){
-        float angle=i*theta;
-        float x=RADIUS*glm::sin(angle);
-        float y=(float)j;
-        float z=RADIUS*glm::cos(angle);
-        glm::mat4 model=glm::mat4(1.0f);
-        model=glm::rotate(model,(float)glfwGetTime(),glm::vec3(0.0f,1.0f,0.0f));
-        model=glm::translate(model,glm::vec3(x,y,z));
-        // model = glm::rotate(model,  glm::radians(static_cast<float>(glfwGetTime()*10.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
-        shaderProgram3.setMat4(0,GL_FALSE,model);
-        glDrawArrays(GL_TRIANGLES,0,36);
-        } 
+        bunny.Draw(shaderProgram3,camera);
 
-        }
+
+      
        
     
         
-        shaderProgram2.use();
-        shaderProgram2.setMat4(1,GL_FALSE,view);
-        VAO2.Bind();
-        EBO2.Bind();
-        glDrawElements(GL_TRIANGLES,sizeof(cubeIndices)/sizeof(int),GL_UNSIGNED_INT,0);
+       
         glfwSwapBuffers(window);
 
         glfwPollEvents();
@@ -305,9 +149,7 @@ int main(){
 
     
     
-    VAO1.Delete();
-    VBO1.Delete();
-    planks.Delete();
+
 
     //terminate glfw 
     glfwTerminate();

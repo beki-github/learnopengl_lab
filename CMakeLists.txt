@@ -40,6 +40,8 @@ add_executable(
     src/Camera.cpp
     src/mesh.h
     src/mesh.cpp
+    src/model.h
+    src/model.cpp
     src/Debugger.h
 )
 
