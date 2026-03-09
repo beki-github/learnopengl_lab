@@ -47,6 +47,7 @@ add_executable(
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/dependencies)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/assimp/lib")
 
 #file(MAKE_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders")
 # creates an empty shader directory inside the executable directory 
@@ -64,12 +65,16 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMENT "Syncing shaders to executable directory..."
 )
 
+find_package(assimp REQUIRED)
+
 if (MSVC)
   target_link_libraries(${PROJECT_NAME} ${GLFW3_LIBRARY} OpenGL::GL)
 elseif(WIN32)
   target_link_libraries(${PROJECT_NAME} PRIVATE 
         glfw3
         opengl32
+        assimp::assimp
+        
     )
 else()
   target_link_libraries(${PROJECT_NAME} glfw OpenGL::GL X11 pthread dl m)
