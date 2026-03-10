@@ -1,124 +1,12 @@
 #version 430 core
 out vec4 FragColor;
 
-struct Material{
-
-
-   vec3 ambient;
-   vec3 diffuse;
-   vec3 specular;
-   float shininess;
-
-
-};
-
-struct spotLight {
-
-   vec3 position;
-   vec3 direction;
-   vec3 ambient;
-   vec3 diffuse;
-   vec3 specular;
-
-};
-struct pointLight{
-   float constant;
-   float linear;
-   float quadratic;
-
-   vec3 position;
-   vec3 ambient;
-   vec3 diffuse;
-   vec3 specular;
-
-};
-layout (location= 10) uniform spotLight spotlight;
-layout (location=20) uniform pointLight pointlight;
-
-
 in vec2 texCoord;
-in vec3 Normal;
-in vec3 fragPos;
-in vec3 viewPos;
 
-uniform sampler2D diffuse0;
-
-uniform sampler2D specular0;
-
-vec3 calcSpotLight(){
-
-   float outercone=0.97f;
-   float innercone=0.999f;
-   vec3 lightToFrag = normalize(fragPos - spotlight.position); // For the spotlight theta
-    vec3 fragToLight = normalize(spotlight.position - fragPos);
-   //calculating the theta for spotlight effect
-   vec3 lightDir =normalize(fragPos-spotlight.position);
-   float theta=dot(lightToFrag,normalize(spotlight.direction)); 
-   float intent=clamp((theta-outercone)/(innercone-outercone),0.0f,1.0f);
- 
-   vec3 ambient=spotlight.ambient*texture(diffuse0,texCoord).rgb;
-   //calculation for diffuse lighting 
-   vec3 norm = normalize(Normal);
-   float diff= max(dot(norm,fragToLight),0.0f);
-   vec3 diffuse=spotlight.diffuse*diff*texture(diffuse0,texCoord).rgb;
-
-   //calculating the specular lighting 
-   float specularStrength=0.5f;
-   vec3 viewDir= normalize(viewPos-fragPos);
-   vec3 reflectDir=reflect(-lightDir,norm);
-   float spec= pow(max(dot(viewDir,reflectDir),0.0f),64);
-   vec3 specular=spotlight.specular*spec*texture(specular0,texCoord).rgb;
-   // for point light 
-   ambient*=intent;
-   diffuse*=intent;
-   specular*=intent;
-
-   //calculating the final output
-   vec3 result = ambient+diffuse+specular;
-
-   return result;
-
-
-}
-
-vec3 calcPointLight(){
-
-   vec3 fragToLight = normalize(pointlight.position - fragPos);
-   //calculating the theta for spotlight effect
-   vec3 lightDir =normalize(fragPos-pointlight.position);
- 
-   vec3 ambient=pointlight.ambient*texture(specular0,texCoord).rgb;
-   //calculation for diffuse lighting 
-   vec3 norm = normalize(Normal);
-   float diff= max(dot(norm,fragToLight),0.0f);
-   vec3 diffuse=pointlight.diffuse*diff*texture(diffuse0,texCoord).rgb;
-
-   //calculating the specular lighting 
-   float specularStrength=0.5f;
-   vec3 viewDir= normalize(viewPos-fragPos);
-   vec3 reflectDir=reflect(-lightDir,norm);
-   float spec= pow(max(dot(viewDir,reflectDir),0.0f),128);
-   vec3 specular=pointlight.specular*spec*texture(specular0,texCoord).rgb;
-   // attuntation for point light 
-    float distance    = length(pointlight.position - fragPos);
-    float attenuation = 1.0 / (pointlight.constant + pointlight.linear * distance + 
-  			     pointlight.quadratic * (distance * distance)); 
-   ambient*=attenuation;
-   diffuse*=attenuation;
-   specular*=attenuation;
-
-   //calculating the final output
-   vec3 result = ambient+diffuse+specular;
-
-   return result;
-
-}
-
+uniform sampler2D texture_diffuse1;
 void main()
 {  
-   vec3 result = calcPointLight()+calcSpotLight();
-   FragColor =vec4(result,1.0);
-  
+   FragColor =texture(texture_diffuse1,texCoord);
 
 }
 

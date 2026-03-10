@@ -21,7 +21,7 @@ float lastFrame=0.0f;
 float deltaTime;
 
 //global intial states for the camera
-glm::vec3 cameraPos= glm::vec3(0.0f,0.25f,6.0f);
+glm::vec3 cameraPos= glm::vec3(0.0f,0.0f,20.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f,1.0f,0.0f);
 //setting the intial state of the mouse to the center of the camera
 float lastX = 400;
@@ -70,11 +70,9 @@ int main(){
    
     
     Shader shaderProgram3("shaders/shader.vert","shaders/shader.frag");
-    Shader shaderProgram2("shaders/lightsource.vert","shaders/lightsource.frag");
 	
 
     glm::mat4 model=glm::mat4(1.0f);
-    glm::mat4 objModel=glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection;
 
@@ -82,33 +80,18 @@ int main(){
    
 
     
-     spotLight light=spotLight(
-                     camera.Position,
-                     camera.Front,
-                     glm::vec3(0.2f,0.2f,0.2f),
-                     glm::vec3(0.5f,0.5f,0.5f),
-                     glm::vec3(1.0f,1.0f,1.0f));
-
-     pointLight light1=pointLight(
-        1.0f,0.009f,0.00032f,
-        glm::vec3(0.0f,2.0f,0.0f),
-        glm::vec3(0.1f,0.1f,0.1f),
-        glm::vec3(0.7f,0.0f,0.0f),
-        glm::vec3(1.0f,0.0f,0.0f));
+  
 
     projection = glm::perspective(glm::radians(45.0f),(float)windowWidth/(float)windowHeight,0.1f,800.0f);
+    model=glm::translate(model,glm::vec3(0.0f,0.0f,0.0f));
     //
     shaderProgram3.use();
-    shaderProgram3.setMat4(2,GL_FALSE,projection);
-    shaderProgram3.setPointLight(light1,20);
+    shaderProgram3.setMat4(5,GL_FALSE,projection);
+    shaderProgram3.setMat4(3,GL_FALSE,model);
+   
+ 
 
 
-    shaderProgram2.use();
-    shaderProgram2.setMat4(2,GL_FALSE,projection);
-    objModel=glm::translate(objModel,glm::vec3(0.0f,0.0f,0.0f));
-    objModel=glm::scale(objModel,glm::vec3(0.5f,0.5f,0.5f));
-    shaderProgram2.setMat4(0,GL_FALSE,objModel);
-    shaderProgram2.setVec3(3,glm::vec3(1.0f,0.0f,0.0f));
     
 
     glEnable(GL_DEPTH_TEST);
@@ -116,7 +99,7 @@ int main(){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    Model bunny("assets/model/scroll/scene.gltf");
+    Model bunny("assets/model/grindstone/scene.gltf");
     
     while(!glfwWindowShouldClose(window)){
 
@@ -126,18 +109,10 @@ int main(){
         view=camera.GetViewMatrix();
         
         shaderProgram3.use();
-        light.direction=camera.Position;
-        light.position=camera.Front;
-        shaderProgram3.setSpotLight(light,10);
-        shaderProgram3.setVec3(5,camera.Position);
+        shaderProgram3.setMat4(4,GL_FALSE,view);
+    
 
-       
-
-        bunny.Draw(shaderProgram3,camera);
-
-
-      
-       
+        bunny.Draw(shaderProgram3);
     
         
        
